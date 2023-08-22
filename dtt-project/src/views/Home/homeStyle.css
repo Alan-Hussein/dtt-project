@@ -1,0 +1,148 @@
+.home {
+  background-color: #f6f6f6;
+  margin-top: 65px;
+  font-family: "Montserrat Bold", sans-serif;
+}
+.house-create-button {
+  display: flex;
+  padding-top: 50px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20%;
+}
+
+.create-button {
+  background-color: #eb5440;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 9px 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.create-button img {
+  width: 11px;
+}
+.plus-grey {
+  display: none;
+}
+.search-sort {
+  display: flex;
+  margin: 0 20%;
+  justify-content: space-between;
+}
+.search-container {
+  position: relative;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-80%);
+  width: 15px;
+}
+
+.search-bar {
+  width: 100%;
+  height: 25px;
+  border: none;
+  border-radius: 5px;
+  background-color: #e8e8e8;
+  padding-left: 30px;
+}
+.search-bar::placeholder {
+  padding-left: 5px;
+}
+.sorting-options {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.radio {
+  display: none;
+}
+.radio-label {
+  display: inline-block;
+  cursor: pointer;
+  padding: 5px 40px;
+  transition: background-color 0.3s;
+  background-color: #e8e8e8; /* Default background color for unselected options */
+  color: white;
+}
+
+.radio:checked + .radio-label {
+  background-color: #eb5440; /* Background color for selected option */
+}
+
+#r1 + .radio-label {
+  border-radius: 5px 0 0 5px;
+}
+#r2 + .radio-label {
+  border-radius: 0 5px 5px 0;
+}
+.search-results-count {
+  margin: 0 20%;
+  font-weight: bold;
+}
+.no-results {
+  background-image: url("../../assets/img_empty_houses@3x.png");
+  background-size: 30%;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 400px; /* Set a suitable height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+.no-results p {
+  position: relative;
+  top: 150px;
+  color: #4a4b4c;
+  font-size: 14px;
+}
+@media only screen and (max-width: 800px) {
+  .home {
+    margin: 0;
+    padding: 0;
+  }
+  .search-sort {
+    flex-direction: column;
+  }
+  .search-bar {
+    width: 89%;
+    margin: 5% 0;
+  }
+  .radio-label {
+    padding: 7px 20%;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .home {
+    margin: 0 0 100px 0;
+    padding: 0;
+  }
+  .search-sort {
+    flex-direction: column;
+    margin: 0 7%;
+  }
+  .search-bar {
+    width: 91%;
+    margin: 5% 0;
+  }
+  .radio-label {
+    padding: 7px 20%;
+  }
+  .create-button {
+    display: none;
+  }
+  .plus-grey {
+    display: block;
+    width: 14px;
+  }
+  h1 {
+    margin: 0 30%;
+  }
+}

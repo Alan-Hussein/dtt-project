@@ -1,0 +1,103 @@
+.create-house {
+  padding: 70px 20%;
+  background-image: url("../../assets/img_background@3x.png");
+  background-position: top left;
+  background-size: cover;
+  font-family: "Montserrat Bold", sans-serif;
+}
+
+.create-house form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-house label {
+  margin-bottom: 5px;
+}
+
+.create-house input {
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 275px;
+  border: none;
+  border-radius: 5px;
+}
+
+.create-house button {
+  background-color: #eb5440;
+  color: white;
+  padding: 8px 10px;
+  margin: 10px 155px;
+  width: 140px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.flex {
+  display: flex;
+  padding-right: 20px;
+  gap: 10px;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.flex-column input {
+  width: 125px;
+}
+.flex-column select {
+  width: 140px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.textarea {
+  height: 80px;
+  width: 290px;
+  border: none;
+  border-radius: 5px;
+}
+.upload-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-button {
+  width: 25px;
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border: 3px #e8e8e8 dashed;
+}
+
+.upload-button img {
+  vertical-align: middle;
+  width: 20px;
+}
+
+/* Hide the input visually */
+input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+input::placeholder {
+  color: #e3e3e3;
+  font-size: 11px;
+}
+@media only screen and (max-width: 600px) {
+  .create-house {
+    padding: 5% 5%;
+    margin-bottom: 100px;
+  }
+  .create-house-header {
+    display: flex;
+  }
+}

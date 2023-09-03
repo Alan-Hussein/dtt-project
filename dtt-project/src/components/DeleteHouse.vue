@@ -25,6 +25,7 @@
 
 <script>
 import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog.vue";
+import { deleteHouse } from "@/utils/api"; // Import the deleteHouse function from api.js
 
 export default {
   components: {
@@ -44,29 +45,15 @@ export default {
       this.showConfirmationDialog = true;
     },
     async deleteHouse() {
-      const myHeaders = new Headers();
-      myHeaders.append("X-Api-Key", "OWeh_-zUi6aD29TxkRgYGIvldJby8LtS");
-
-      const requestOptions = {
-        method: "DELETE",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-
       try {
-        const response = await fetch(
-          `https://api.intern.d-tt.nl/api/houses/${this.houseId}`,
-          requestOptions
-        );
-        if (response.ok) {
+        const success = await deleteHouse(this.houseId);
+        if (success) {
           console.log("House deleted successfully");
           this.showConfirmationDialog = false;
           this.$emit("house-deleted");
 
-          // Redirect to the home page
+          // Redirect to the home page or another appropriate route
           this.$router.push({ name: "home" });
-        } else {
-          console.error("House deletion request failed:", response.statusText);
         }
       } catch (error) {
         console.error("Error deleting house:", error);

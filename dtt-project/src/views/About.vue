@@ -50,13 +50,14 @@
 
 <style scoped>
 .about {
-  padding: 65px 20%;
+  padding: 100px 20%;
   background-color: #f6f6f6;
-  height: auto;
+  height: 100vh;
+  font-family: "Montserrat Bold", sans-serif;
 }
 .about p {
   color: #4a4b4c;
-  font-family: "Semibold", sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 .About-links img {
   width: 200px;
@@ -71,8 +72,9 @@
 }
 @media only screen and (max-width: 600px) {
   .about {
-    padding: 65px 10%;
+    padding: 5% 10%;
     margin-bottom: 100px;
+    height: 100%;
   }
 }
 </style>

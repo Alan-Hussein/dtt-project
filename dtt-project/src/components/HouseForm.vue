@@ -1,12 +1,6 @@
 <template>
-  <div class="create-house">
-    <div class="create-house-header">
-      <back-to-overview></back-to-overview>
-      <h2>Create New Listing</h2>
-    </div>
-
-    <form @submit.prevent="submitForm">
-      <label for="streetName">Street Name*</label>
+  <form class="house-form" @submit.prevent="handleFormSubmit">
+    <label for="streetName">Street Name*</label>
     <input
       id="streetName"
       v-model="formData.streetName"
@@ -71,7 +65,7 @@
         accept="image/*"
       />
       <label v-if="!formData.image" for="image" class="upload-button">
-        <img src="../../assets/ic_upload@3x.png" alt="Upload Image" />
+        <img src="../assets/ic_upload@3x.png" alt="Upload Image" />
       </label>
       <img
         v-else
@@ -106,7 +100,7 @@
         </div>
       </div>
       <div class="flex-column">
-        <label for="hasGarage">Garage*</label>
+        <label for="hasGarage">Has Garage*</label>
         <select
           id="hasGarage"
           v-model="formData.hasGarage"
@@ -176,32 +170,21 @@
     <div v-if="formErrors.description" class="error-text">
       Required field missing
     </div>
-    <button type="submit">POST</button>
-    </form>
-  </div>
+    <!--mode is for show POST button in Create houes page and show SAVE in Edit page. -->
+    <button type="submit">{{ mode === "create" ? "POST" : "SAVE" }}</button>
+  </form>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import BackToOverview from "../../components/BackToOverview.vue";
 import { defineProps, reactive } from "vue";
 
-const formData = ref({
-  streetName: "",
-  houseNumber: "",
-  numberAddition: "",
-  zip: "",
-  city: "",
-  price: null,
-  size: null,
-  bedrooms: null,
-  bathrooms: null,
-  constructionYear: null,
-  hasGarage: "",
-  description: "",
-  image: null,
-  madeByMe: true,
+// Define the `props` variable to receive props passed to the component
+const props = defineProps({
+  formData: Object,
+  handleImageChange: Function,
+  handleSubmit: Function,
+  mode: String,
+  imageInput: Object, // Define imageInput as a prop
 });
 
 const formErrors = reactive({
@@ -218,108 +201,166 @@ const formErrors = reactive({
   constructionYear: false,
   description: false,
 });
+function handleImageChange(event) {
+  const file = event.target.files[0]; // Get the first selected file
+  if (file) {
+    // Create a FileReader to read the selected file as a data URL
+    const reader = new FileReader();
 
-const router = useRouter();
-const imageInput = ref(null);
+    reader.onload = () => {
+      // Update formData.image with the data URL of the selected file
+      props.formData.image = reader.result;
+    };
 
-function handleImageChange() {
-  const file = imageInput.value.files[0];
-  formData.value.image = file;
+    // Read the selected file as a data URL
+    reader.readAsDataURL(file);
+  }
+}
+function validateForm() {
+  for (const field in formErrors) {
+    formErrors[field] = false;
+  }
+
+  const requiredFields = [
+    "streetName",
+    "houseNumber",
+    "zip",
+    "city",
+    "price",
+    "size",
+    "hasGarage",
+    "bedrooms",
+    "bathrooms",
+    "constructionYear",
+    "description",
+  ];
+
+  let isValid = true;
+
+  requiredFields.forEach((fieldName) => {
+    if (!props.formData[fieldName]) {
+      formErrors[fieldName] = true;
+      isValid = false;
+    }
+  });
+
+  return isValid;
 }
 
-function validateField(fieldName) {
-  if (!formData.value[fieldName]) {
-    formErrors[fieldName] = true;
+function handleFormSubmit(event) {
+  console.log("Form submission attempted");
+  if (!validateForm()) {
+    event.preventDefault(); // Prevent form submission if validation fails
   } else {
-    formErrors[fieldName] = false;
+    // Proceed with form submission
+    props.handleSubmit();
   }
 }
-
-async function createHouse() {
-  const houseFormData = new FormData();
-  for (const key in formData.value) {
-    if (key !== "image") {
-      houseFormData.append(key, formData.value[key]);
-    }
-  }
-
-  const houseHeaders = new Headers();
-  houseHeaders.append("X-Api-Key", "OWeh_-zUi6aD29TxkRgYGIvldJby8LtS");
-
-  const houseRequestOptions = {
-    method: "POST",
-    headers: houseHeaders,
-    body: houseFormData,
-    redirect: "follow",
-  };
-
-  try {
-    const houseResponse = await fetch(
-      "https://api.intern.d-tt.nl/api/houses",
-      houseRequestOptions
-    );
-    if (houseResponse.ok) {
-      const houseResult = await houseResponse.json();
-
-      const imageFormData = new FormData();
-      imageFormData.append("image", formData.value.image);
-
-      const imageHeaders = new Headers();
-      imageHeaders.append("X-Api-Key", "OWeh_-zUi6aD29TxkRgYGIvldJby8LtS");
-
-      const imageRequestOptions = {
-        method: "POST",
-        headers: imageHeaders,
-        body: imageFormData,
-        redirect: "follow",
-      };
-
-      const imageResponse = await fetch(
-        `https://api.intern.d-tt.nl/api/houses/${houseResult.id}/upload`,
-        imageRequestOptions
-      );
-      if (imageResponse.ok) {
-        // Handle successful image upload
-      } else {
-        console.error("Image upload failed:", imageResponse.statusText);
-      }
-
-      router.push({
-        name: "house-details",
-        params: { id: houseResult.id },
-      });
-    } else {
-      console.error("House creation request failed:", houseResponse.statusText);
-    }
-  } catch (error) {
-    console.error("Error creating house:", error);
-  }
-}
-
-function submitForm() {
-  // Validate all required fields before submitting the form
-  validateField("streetName");
-  validateField("houseNumber");
-  validateField("zip");
-  validateField("city");
-  validateField("price");
-  validateField("size");
-  validateField("hasGarage");
-  validateField("bedrooms");
-  validateField("bathrooms");
-  validateField("constructionYear");
-  validateField("description");
-
-  // Check if there are any validation errors
-  const hasErrors = Object.values(formErrors).some((error) => error);
-
-  if (!hasErrors) {
-    // If there are no errors, proceed to create the house
-    createHouse();
-  }
-}
-
 </script>
+
 <style scoped>
-@import "./createHouseStyle.css";
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+  color: #4a4b4c;
+}
+
+input {
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 275px;
+  border: none;
+  border-radius: 5px;
+}
+
+button {
+  background-color: #eb5440;
+  color: white;
+  padding: 8px 10px;
+  margin: 10px 155px;
+  width: 140px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.flex {
+  display: flex;
+  padding-right: 20px;
+  gap: 10px;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.flex-column input {
+  width: 125px;
+}
+.flex-column select {
+  width: 140px;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.textarea {
+  height: 80px;
+  width: 290px;
+  border: none;
+  border-radius: 5px;
+}
+.upload-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-button {
+  width: 25px;
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border: 3px #e8e8e8 dashed;
+}
+
+.upload-button img {
+  vertical-align: middle;
+  width: 20px;
+}
+.uploaded-image {
+  width: 125px;
+}
+/* Hide the input visually */
+input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+input::placeholder {
+  color: #e3e3e3;
+  font-size: 11px;
+}
+/*---*/
+.input-field.invalid {
+  border: 1px solid #eb5440;
+}
+.input-field.invalid::placeholder {
+  color: #eb5440;
+}
+
+.error-text {
+  color: #eb5440;
+  font-size: 12px;
+  margin-top: 5px;
+  font-style: italic;
+}
+
 </style>

@@ -5,139 +5,12 @@
       <h1>Edit Listing</h1>
     </div>
 
-    <form @submit.prevent="editHouse">
-      <label for="streetName">Street Name:</label>
-      <input
-        v-model="formData.streetName"
-        type="text"
-        required
-        placeholder="Enter the street name"
-      />
-      <div class="flex">
-        <div class="flex-column">
-          <label for="houseNumber">House Number:</label>
-          <input
-            v-model="formData.houseNumber"
-            type="text"
-            required
-            placeholder="Enter house number"
-          />
-        </div>
-        <div class="flex-column">
-          <label for="numberAddition">Number Addition:</label>
-          <input
-            v-model="formData.numberAddition"
-            type="text"
-            placeholder="e.g, A"
-          />
-        </div>
-      </div>
-
-      <label for="zip">Postal Code:</label>
-      <input
-        v-model="formData.zip"
-        type="text"
-        required
-        placeholder="e.g. 1000 AA"
-      />
-
-      <label for="city">City:</label>
-      <input
-        v-model="formData.city"
-        type="text"
-        required
-        placeholder="e.g Utrecht"
-      />
-      <div class="upload-container">
-        <label for="image">Upload picture (PNG or JPG)</label>
-        <input
-          type="file"
-          id="image"
-          ref="imageInput"
-          @change="handleImageChange"
-          accept="image/*"
-        />
-        <label v-if="!formData.image" for="image" class="upload-button">
-          <img
-            src="../../assets/ic_upload@3x.png"
-            alt="Upload Image"
-            class="uploaded-image"
-          />
-        </label>
-        <img
-          v-else
-          :src="formData.image"
-          alt="Uploaded Image"
-          class="uploaded-image"
-        />
-      </div>
-      <label for="price">Price:</label>
-      <input
-        v-model="formData.price"
-        type="number"
-        required
-        placeholder="e.g €150.000"
-      />
-
-      <div class="flex">
-        <div class="flex-column">
-          <label for="size">Size:</label>
-          <input
-            v-model="formData.size"
-            type="number"
-            required
-            placeholder="e.g 60m2"
-          />
-        </div>
-        <div class="flex-column">
-          <label for="hasGarage">Has Garage:</label>
-          <select v-model="formData.hasGarage" required>
-            <option value="" disabled>Select</option>
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="flex">
-        <div class="flex-column">
-          <label for="bedrooms">Bedrooms:</label>
-          <input
-            v-model="formData.bedrooms"
-            type="number"
-            required
-            placeholder="Enter amount"
-          />
-        </div>
-        <div class="flex-column">
-          <label for="bathrooms">Bathrooms:</label>
-          <input
-            v-model="formData.bathrooms"
-            type="number"
-            required
-            placeholder="Enter amount"
-          />
-        </div>
-      </div>
-
-      <label for="constructionYear">Construction Year:</label>
-      <input
-        v-model="formData.constructionYear"
-        type="number"
-        required
-        placeholder="e.g 1990"
-      />
-
-      <label for="description">Description:</label>
-      <textarea
-        class="textarea"
-        v-model="formData.description"
-        required
-        placeholder="Enter description"
-      ></textarea>
-
-      <button type="submit">{{ editMode ? "Save" : "Create Listing" }}</button>
-    </form>
+    <HouseForm
+      :formData="formData"
+      :handleImageChange="handleImageChange"
+      :handleSubmit="editHouse"
+      :mode="'edit'"
+    />
   </div>
 </template>
 
@@ -145,6 +18,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import BackToDetails from "../../components/BackToDetails.vue";
+import HouseForm from "../../components/HouseForm.vue";
 function handleImageChange(event) {
   const newImageFile = event.target.files[0];
   formData.value.image = newImageFile; // Update image property with the new image file

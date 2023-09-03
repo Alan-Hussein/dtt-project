@@ -1,55 +1,53 @@
 <template>
-  <div class="house-card">
-    <router-link :to="{ name: 'house-details', params: { id: house.id } }">
+  <router-link :to="{ name: 'house-details', params: { id: house.id } }" class="house-card">
       <div class="house-image">
         <img :src="house.image" :alt="house.name" class="house-img" />
       </div>
-    </router-link>
-    <div class="house-inormations">
-      <div>
-        <h3>{{ house.location.street }} {{ house.location.houseNumber }}</h3>
-        <p class="price">€ {{ house.price }}</p>
-        <p class="location">
-          {{ house.location.zip }} {{ house.location.city }}
-        </p>
+      <div class="house-inormations">
+        <div>
+          <h3>{{ house.location.street }} {{ house.location.houseNumber }}</h3>
+          <p class="price">€ {{ house.price }}</p>
+          <p class="location">
+            {{ house.location.zip }} {{ house.location.city }}
+          </p>
+        </div>
+        <div>
+          <ul class="house-icons-informations">
+            <li class="icon-item">
+              <img src="../assets/ic_bed@3x.png" alt="bed" class="icon" />
+              {{ house.rooms.bedrooms }}
+            </li>
+            <li class="icon-item">
+              <img src="../assets/ic_bath@3x.png" alt="bath" class="icon" />
+              {{ house.rooms.bathrooms }}
+            </li>
+            <li class="icon-item">
+              <img src="../assets/ic_size@3x.png" alt="size" class="icon" />
+              {{ house.size }} m2
+            </li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <ul class="house-icons-informations">
-          <li class="icon-item">
-            <img src="../assets/ic_bed@3x.png" alt="bed" class="icon" />
-            {{ house.rooms.bedrooms }}
-          </li>
-          <li class="icon-item">
-            <img src="../assets/ic_bath@3x.png" alt="bath" class="icon" />
-            {{ house.rooms.bathrooms }}
-          </li>
-          <li class="icon-item">
-            <img src="../assets/ic_size@3x.png" alt="size" class="icon" />
-            {{ house.size }} m2
-          </li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="edit-delete" v-if="house.madeByMe">
-      <div class="edit-button">
-        <router-link :to="{ name: 'edit-house', params: { id: house.id } }">
-          <img
-            src="../assets/ic_edit@3x.png"
-            alt="edit-icon"
-            class="edit-icon"
+      <div class="edit-delete" v-if="house.madeByMe">
+        <div class="edit-button">
+          <router-link :to="{ name: 'edit-house', params: { id: house.id } }">
+            <img
+              src="../assets/ic_edit@3x.png"
+              alt="edit-icon"
+              class="edit-icon"
+            />
+          </router-link>
+        </div>
+        <div>
+          <!--Reload page after delete a house -->
+          <DeleteHouse
+            :houseId="house.id.toString()"
+            @house-deleted="refreshPage"
           />
-        </router-link>
+        </div>
       </div>
-      <div>
-        <!--Reload page after delete a house -->
-        <DeleteHouse
-          :houseId="house.id.toString()"
-          @house-deleted="refreshPage"
-        />
-      </div>
-    </div>
-  </div>
+  </router-link>
 </template>
 
 <script setup>
@@ -79,6 +77,7 @@ li {
   text-decoration: none;
   position: relative;
   font-family: "Montserrat Bold", sans-serif;
+  color: #000000;
 }
 .house-img {
   width: 120px;

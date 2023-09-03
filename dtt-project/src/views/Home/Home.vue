@@ -17,69 +17,42 @@
       </router-link>
     </div>
     <div class="search-sort">
-      <div class="search-container">
-        <img
-          src="../../assets/ic_search@3x.png"
-          alt="search-icon"
-          class="search-icon"
-        />
-        <input
-          v-model="searchCity"
-          @keyup.enter="filterHouses"
-          placeholder="Search for a house"
-          class="search-bar"
-        />
-      </div>
-      <div class="sorting-options">
-        <input
-          type="radio"
-          id="r1"
-          v-model="sortBy"
-          value="price"
-          checked
-          class="radio"
-        />
-        <label for="r1" class="radio-label">Price</label>
-
-        <input
-          type="radio"
-          id="r2"
-          v-model="sortBy"
-          value="size"
-          class="radio"
-        />
-        <label for="r2" class="radio-label">Size</label>
-      </div>
+      <SearchBar v-model="searchCity" @filter="handleFilter" />
+      <SortingOptions v-model="sortBy" />
     </div>
-    <!-- Display search results count after performing a search -->
-    <div v-if="searchCity !== ''" class="search-results-count">
-      <p>{{ filteredHouses.length }} results found</p>
+    <!-- Display sorted and filtered houses together -->
+    <div v-if="sortedAndFilteredHouses.length > 0">
+      <div v-if="searchCity !== ''" class="search-results-count">
+        <p>{{ filteredHouses.length }} results found</p>
+      </div>
+      <HouseCard
+        v-for="house in sortedAndFilteredHouses"
+        :key="house.id"
+        :house="house"
+      />
     </div>
-    <!-- Display no results background image when there are no search results -->
-    <div
-      v-if="searchCity !== '' && filteredHouses.length === 0"
-      class="no-results"
-    >
+    <!-- Display a message if no results are found -->
+    <div v-else class="no-results">
       <p>No results found.</p>
-      <p>please try another keyword</p>
+      <p>please try another keyword.</p>
     </div>
-    <HouseCard v-for="house in sortedHouses" :key="house.id" :house="house" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import HouseCard from "../../components/HousesCard.vue";
-
+import SortingOptions from "../../components/SortingOptions.vue";
+import { useSorting } from "../../utils/useSorting";
+import { useSearch } from "../../utils/useSearch";
+import SearchBar from "../../components/SearchBar.vue";
 const houses = ref([]);
-const searchCity = ref("");
-const sortBy = ref("price"); // Default sorting criteria.
 
 onMounted(() => {
-  var myHeaders = new Headers();
+  const myHeaders = new Headers();
   myHeaders.append("X-Api-Key", "OWeh_-zUi6aD29TxkRgYGIvldJby8LtS");
 
-  var requestOptions = {
+  const requestOptions = {
     method: "GET",
     headers: myHeaders,
     redirect: "follow",
@@ -94,28 +67,25 @@ onMounted(() => {
     .catch((error) => console.log("error", error));
 });
 
-const filteredHouses = computed(() => {
-  if (searchCity.value === "") {
-    return houses.value;
-  } else {
-    return houses.value.filter((house) =>
-      house.location.city.toLowerCase().includes(searchCity.value.toLowerCase())
-    );
-  }
-});
+const { sortBy, sortedHouses } = useSorting(houses, null); //set the 
+const { searchCity, filteredHouses, setSearchCity } = useSearch(houses);
+const handleFilter = (city) => {
+  // Update the searchCity value when the "filter" event is emitted
+  setSearchCity(city);
+};
 
-const sortedHouses = computed(() => {
-  return filteredHouses.value.slice().sort((a, b) => {
-    if (sortBy.value === "price") {
-      return a.price - b.price;
-    } else if (sortBy.value === "size") {
-      return a.size - b.size;
-    }
-  });
+// Combine sorted and filtered houses into a single array
+const sortedAndFilteredHouses = computed(() => {
+  if (searchCity.value === "") {
+    return sortedHouses.value;
+  } else {
+    const filteredSet = new Set(filteredHouses.value);
+    return sortedHouses.value.filter((house) => filteredSet.has(house));
+  }
 });
 </script>
 
-<style scoped>
+<style>
 /* Add your styles here */
 @import "./homeStyle.css";
 </style>

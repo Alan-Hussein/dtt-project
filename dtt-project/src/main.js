@@ -23,6 +23,7 @@ const routes = [
     name: "edit-house",
     component: EditHouse,
   },
+
 ];
 
 const router = createRouter({

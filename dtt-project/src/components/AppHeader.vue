@@ -2,19 +2,36 @@
   <div class="app-header">
     <Logo></Logo>
     <nav class="navbar">
-      <RouterLink to="/" class="link" active-class="active-link"
+      <RouterLink
+        to="/"
+        class="link"
+        :class="{ 'active-link': activeLink === 'home' }"
+        @click="setActiveLink('home')"
         >Houses</RouterLink
       >
-      <RouterLink to="/about" class="link" active-class="active-link"
+      <RouterLink
+        to="/about"
+        class="link"
+        :class="{ 'active-link': activeLink === 'about' }"
+        @click="setActiveLink('about')"
         >About</RouterLink
       >
     </nav>
   </div>
 </template>
 
+
 <script setup>
-import { RouterLink } from "vue-router";
+import { RouterLink ,useRoute} from "vue-router";
+import { ref } from "vue";
+
 import Logo from "./Logo.vue";
+const route = useRoute();
+const activeLink = ref("home"); // Set a default active link
+
+const setActiveLink = (linkName) => {
+  activeLink.value = linkName;
+};
 </script>
 
 <style scoped>

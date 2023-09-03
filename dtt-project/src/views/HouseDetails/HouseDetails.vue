@@ -141,10 +141,10 @@ window.addEventListener("resize", () => {
 });
 
 onMounted(() => {
-  var myHeaders = new Headers();
+  const myHeaders = new Headers();
   myHeaders.append("X-Api-Key", "OWeh_-zUi6aD29TxkRgYGIvldJby8LtS");
 
-  var requestOptions = {
+  const requestOptions = {
     method: "GET",
     headers: myHeaders,
     redirect: "follow",

@@ -13,6 +13,7 @@
 
 .create-house label {
   margin-bottom: 5px;
+  color:#4A4B4C;
 }
 
 .create-house input {
@@ -92,12 +93,29 @@ input::placeholder {
   color: #e3e3e3;
   font-size: 11px;
 }
+.input-field.invalid {
+  border: 1px solid #eb5440;
+}
+.input-field.invalid::placeholder {
+  color: #eb5440;
+}
+
+.error-text {
+  color: #eb5440;
+  font-size: 12px;
+  margin-top: 5px;
+  font-style: italic;
+}
 @media only screen and (max-width: 600px) {
   .create-house {
-    padding: 5% 5%;
+    padding: 5% 10%;
     margin-bottom: 100px;
   }
   .create-house-header {
     display: flex;
+    align-items: center;
+  }
+  h2{
+    padding-left: 20px;
   }
 }

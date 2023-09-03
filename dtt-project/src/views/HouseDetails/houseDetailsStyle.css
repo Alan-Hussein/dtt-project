@@ -14,12 +14,12 @@
   padding-right: 10px;
 }
 .house-details-img {
-  width: 550px;
+  width: 750px;
 }
 .house-informations-details {
   background-color: #ffffff;
   padding: 25px;
-  width: 500px;
+  width: 700px;
   position: relative;
 }
 .house-information-and-delete {
@@ -36,7 +36,6 @@
   position: absolute;
   display: flex;
   align-items: center;
-  position: absolute;
   right: 25px;
 }
 h3 {

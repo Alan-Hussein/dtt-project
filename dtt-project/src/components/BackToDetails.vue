@@ -1,20 +1,27 @@
-  <!-- Here is button used to back to house details page. -->
+<!-- Here is button used to back to house details page. -->
 <template>
-  <div class="back">
-    <router-link :to="{ name: 'house-details' }">
+  <div >
+    <router-link class="back" :to="{ name: 'house-details' }">
       <img
         src="../assets/ic_back_grey@3x.png"
         alt="back-icon"
         class="back-icon"
-    /></router-link>
-    <p class="back-text">Back to detail page</p>
+      />
+      <p class="back-text">Back to detail page</p>
+    </router-link>
   </div>
 </template>
-<style>
+<style scoped>
 .back {
   display: flex;
   align-items: center;
+  text-decoration: none;
 }
+
+.back-text {
+  color: #000000;
+}
+
 .back-icon {
   width: 16px;
 }
